@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل التنفيذ Team DR/Basma</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* إعدادات أساسية */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* الهيدر */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        header > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .team-badge {
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* التخطيط */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        @media (min-width: 992px) {
+            .main-layout {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+        
+        /* البطاقات */
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border-top: 4px solid var(--primary);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+        
+        .card-title i {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        /* الخطوات */
+        .steps-container {
+            counter-reset: step-counter;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--gray-light);
+        }
+        
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .step-number {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-left: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .step-content {
+            flex-grow: 1;
+        }
+        
+        .step-content h4 {
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+        
+        /* القوائم */
+        ul, ol {
+            padding-right: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            padding-right: 8px;
+        }
+        
+        /* التنبيهات */
+        .alert {
+            padding: 18px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .alert i {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .alert-warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-right: 5px solid var(--warning);
+            color: #92400e;
+        }
+        
+        .alert-info {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-right: 5px solid var(--primary);
+            color: #1e40af;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border-right: 5px solid var(--danger);
+            color: #991b1b;
+        }
+        
+        /* المجموعات المستهدفة */
+        .target-groups {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .group-item {
+            background: var(--light);
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+        
+        .group-item:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.03);
+        }
+        
+        .group-item i {
+            color: var(--primary);
+        }
+        
+        .group-item:hover i {
+            color: white;
+        }
+        
+        /* الأرقام */
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 10px;
+            border: 1px solid var(--gray-light);
+            margin-top: 15px;
+        }
+        
+        .number-item {
+            background: var(--gray-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: default;
+        }
+        
+        .number-item:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        /* متصفحات */
+        .browsers {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .browser {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            border: 1px solid var(--gray-light);
+            transition: var(--transition);
+        }
+        
+        .browser:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        
+        .browser-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .browser-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .browser-count {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* منطقة نسخ الأوامر */
+        .commands-section {
+            margin-top: 30px;
+        }
+        
+        .command-box {
+            background: var(--dark);
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-top: 15px;
+            position: relative;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+            z-index: 10;
+        }
+        
+        .copy-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .command-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .command-title i {
+            color: var(--primary);
+        }
+        
+        .command-box pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-top: 25px;
+            direction: ltr;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* الفوتر */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            color: var(--gray);
+            border-top: 1px solid var(--gray-light);
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--gray-light);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- الهيدر -->
+        <header>
+            <h1><i class="fas fa-tasks"></i> دليل التنفيذ الكامل</h1>
+            <p class="subtitle">إرشادات تفصيلية لإنشاء وإدارة حسابات Reddit بفعالية</p>
+            <div class="team-badge">
+                <i class="fas fa-users"></i> Team DR/Basma
+            </div>
+        </header>
+        
+        <!-- المحتوى الرئيسي -->
+        <div class="main-layout">
+            <!-- العمود الأيسر (المحتوى الرئيسي) -->
+            <div class="main-content">
+                <!-- قسم إعداد الأجهزة -->
+                <section class="card">
+                    <div class="card-title">
+                        <i class="fas fa-wifi"></i>
+                        <h2>إعداد الأجهزة والشبكة</h2>
+                    </div>
+                    <div class="steps-container">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>تشغيل الهوتسبوت</h4>
+                                <p>شغل هوتسبوت من الموبايل على الابتوب وتأكد أن الابتوب متصل بالهوتسبوت فقط</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>تغيير الآي بي بعد كل حساب</h4>
+                                <ul>
+                                    <li>أقل الموبايل داتا لمدة 5 دقائق</li>
+                                    <li>أعد تشغيل البيانات وتحقق من تغيير الآي بي عبر <a href="https://whatismyipaddress.com" target="_blank">whatismyipaddress.com</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- قسم إنشاء الحسابات -->
+                <section class="card">
+                    <div class="card-title">
+                        <i class="fas fa-user-plus"></i>
+                        <h2>إنشاء الحسابات</h2>
+                    </div>
+                    <div class="steps-container">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>فتح المتصفح</h4>
+                                <p>افتح المتصفح الأول (مثال: كروم بروفايل 1)</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>التسجيل في Reddit</h4>
+                                <p>ادخل على <a href="https://reddit.com" target="_blank">reddit.com</a> → Sign Up</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>اختيار طريقة التسجيل</h4>
+                                <p>اختار التسجيل بايميل (يفضل Gmail)</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>اختيار اسم المستخدم</h4>
+                                <p>اختر يوزرنيم طبيعي (من غير أرقام كثير)</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h4>إكمال التسجيل</h4>
+                                <p>سجل الدخول واتخطى أي خطوات إضافية</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">6</div>
+                            <div class="step-content">
+                                <h4>الانتقال للحساب التالي</h4>
+                                <p>خرج من الحساب، وغير الآي بي، واعمل الحساب التالي في نفس المتصفح ولكن نافذة خاصة أو بروفايل جديد</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- قسم توزيع الحسابات -->
+                <section class="card">
+                    <div class="card-title">
+                        <i class="fas fa-layer-group"></i>
+                        <h2>توزيع الحسابات على المتصفحات</h2>
+                    </div>
+                    <p>كل متصفح هيكون فيه 4 حسابات (كل حساب في بروفايل منفصل):</p>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <div>
+                            <strong>ملاحظة هامة:</strong> هذا التوزيع يضمن عدم اكتشاف الحسابات المرتبطة ببعضها ويوفر إدارة أفضل للحسابات.
+                        </div>
+                    </div>
+                    
+                    <div class="browsers">
+                        <div class="browser">
+                            <div class="browser-icon">
+                                <i class="fab fa-chrome"></i>
+                            </div>
+                            <div class="browser-name">Google Chrome</div>
+                            <div class="browser-count">4 حسابات</div>
+                        </div>
+                        <div class="browser">
+                            <div class="browser-icon">
+                                <i class="fab fa-edge"></i>
+                            </div>
+                            <div class="browser-name">Microsoft Edge</div>
+                            <div class="browser-count">4 حسابات</div>
+                        </div>
+                        <div class="browser">
+                            <div class="browser-icon">
+                                <i class="fab fa-brave"></i>
+                            </div>
+                            <div class="browser-name">Brave</div>
+                            <div class="browser-count">4 حسابات</div>
+                        </div>
+                        <div class="browser">
+                            <div class="browser-icon">
+                                <i class="fas fa-window-restore"></i>
+                            </div>
+                            <div class="browser-name">Vivaldi</div>
+                            <div class="browser-count">4 حسابات</div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- قسم نسخ الأوامر - قالب الرد -->
+                <section class="card commands-section">
+                    <div class="card-title">
+                        <i class="fas fa-reddit-alien"></i>
+                        <h2>قالب الرد على Reddit</h2>
+                    </div>
+                    
+                    <div class="command-title">
+                        <i class="fas fa-comment"></i>
+                        <h3>تعليمات لتحسين النص وإضافة معلومات مفيدة</h3>
+                    </div>
+                    <div class="command-box">
+                        <button class="copy-btn" onclick="copyCommand('reddit-reply-template')">
+                            <i class="far fa-copy"></i> نسخ
+                        </button>
+                        <pre id="reddit-reply-template">improve text and enhance with additional useful information (( ###### ))
+----------------------------------------------------------------------------
+someone who is not me posted this:
+
+((#########))
+
+—
+
+Someone else replied:
+
+((#########))
+
+—
+
+– Respond to the second person briefly in 1 line.
+– Sound like a real human reddit user not like a robot.
+– Remember it is not my issue, it’s someone’s else’s.
+– Don’t use any type of dash symbols in your text (no en dash, em dash, etc.)
+– Be simple, humble and understanding.
+– Don’t use any icons.
+-change output every time  
+
+⯈Important Note: Never use dashes (—) in your text and don't sound too formal, so that people won't recognize that your content is AI modified.
+
+
+
+
+                        </pre>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- العمود الأيمن (الجانبي) -->
+            <div class="sidebar">
+                <!-- قسم المجموعات المستهدفة -->
+                <section class="card">
+                    <div class="card-title">
+                        <i class="fas fa-bullseye"></i>
+                        <h2>المجموعات المستهدفة</h2>
+                    </div>
+                    <p>مجموعات Reddit الموصى بالتفاعل فيها:</p>
+                    
+                    <div class="target-groups">
+                        <div class="group-item">
+                            <i class="fas fa-question-circle"></i>
+                            <span>r/AskReddit</span>
+                        </div>
+                        <div class="group-item">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>r/NoStupidQuestions</span>
+                        </div>
+                        <div class="group-item">
+                            <i class="fas fa-heart"></i>
+                            <span>r/offmychest</span>
+                        </div>
+                        <div class="group-item">
+                            <i class="fas fa-user-tie"></i>
+                            <span>r/AmItheAsshole</span>
+                        </div>
+                        <div class="group-item">
+                            <i class="fas fa-question"></i>
+                            <span>r/questions</span>
+                        </div>
+                        <div class="group-item">
+                            <i class="fas fa-male"></i>
+                            <span>r/AskMen</span>
+                        </div>
+                        <div class="group-item">
+                            <i class="fas fa-female"></i>
+                            <span>r/AskWomen</span>
+                        </div>
+                        <div class="group-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>r/TooAfraidToAsk</span>
+                        </div>
+                        <div class="group-item">
+                            <i class="fas fa-child"></i>
+                            <span>r/ExplainLikeImFive</span>
+                        </div>
+                        <div class="group-item">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>r/BestofRedditorUpdates</span>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- قسم الملاحظات المهمة -->
+                <section class="card">
+                    <div class="card-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h2>ملاحظات وتحذيرات</h2>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div>
+                            <strong>حد يومي:</strong> متعملش أكثر من 2 حساب في اليوم
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-danger">
+                        <i class="fas fa-ban"></i>
+                        <div>
+                            <strong>عدم التكرار:</strong> متحطش نفس الكومنت على أكثر من حساب
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <strong>الكارما:</strong> بتزيد بالتدريج مع الوقت، وكل ما الحساب أقدم كل ما كان موثوق فيه أكثر
+                        </div>
+                    </div>
+                    
+                    <ul>
+                        <li><strong>مراجعة دورية:</strong> راجع كل الحسابات وتأكد إنها شغالة</li>
+                        <li><strong>الإبلاغ الفوري:</strong> لو أي حساب اتحظر، بلغني على طول</li>
+                        <li><strong>الاستفسار أولاً:</strong> لو عندك أي سؤال، اسأل قبل ما تعمل خطوة</li>
+                        <li><strong>حسابات ChatGPT:</strong> خلي معاك 3 حسابات ChatGPT جاهزة (كل حساب في بروفايل منفصل)</li>
+                    </ul>
+                </section>
+                
+                <!-- قسم النصائح الإضافية -->
+                <section class="card">
+                    <div class="card-title">
+                        <i class="fas fa-lightbulb"></i>
+                        <h2>نصائح إضافية</h2>
+                    </div>
+                    
+                    <ul>
+                        <li>قم بتسجيل الدخول بشكل دوري للحسابات (مرة كل يومين)</li>
+                        <li>تفاعل بشكل طبيعي في المجموعات المستهدفة</li>
+                        <li>احتفظ بسجل للحسابات التي تم إنشاؤها (اسم مستخدم، إيميل، تاريخ الإنشاء)</li>
+                        <li>استخدم أوقات متفاوتة للتفاعل لتجنب الأنماط القابلة للاكتشاف</li>
+                        <li>تجنب الإفراط في النشر أو التعليق في فترة زمنية قصيرة</li>
+                        <li>استخدم قالب "تحسين النص" لضمان ردود طبيعية وغير متكررة</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+        
+        <!-- الفوتر -->
+        <footer>
+            <p><strong>Team DR/Basma</strong></p>
+            <p>© 2026 - جميع الحقوق محفوظة. Team DR/Basma</p>
+        </footer>
+    </div>
+
+    <script>
+        // إضافة الأرقام من 5 إلى 175
+        document.addEventListener('DOMContentLoaded', function() {
+            const numbersContainer = document.getElementById('numbersContainer');
+            
+            if (numbersContainer) {
+                // إنشاء الأرقام من 5 إلى 175
+                for (let i = 5; i <= 175; i++) {
+                    const numberItem = document.createElement('div');
+                    numberItem.className = 'number-item';
+                    numberItem.textContent = i;
+                    
+                    // إضافة تأثير عند النقر
+                    numberItem.addEventListener('click', function() {
+                        this.classList.toggle('selected');
+                        if (this.classList.contains('selected')) {
+                            this.style.background = '#10b981';
+                        } else {
+                            this.style.background = '';
+                        }
+                    });
+                    
+                    numbersContainer.appendChild(numberItem);
+                }
+                
+                // تمييز بعض الأرقام المهمة
+                const importantNumbers = [10, 20, 30, 50, 100, 150];
+                importantNumbers.forEach(num => {
+                    const elem = Array.from(numbersContainer.children).find(child => parseInt(child.textContent) === num);
+                    if (elem) {
+                        elem.style.background = '#f59e0b';
+                        elem.style.color = 'white';
+                        elem.title = 'رقم مهم';
+                    }
+                });
+            }
+        });
+        
+        // وظيفة نسخ الأوامر
+        function copyCommand(commandId) {
+            const commandElement = document.getElementById(commandId);
+            
+            if (!commandElement) {
+                alert('عنصر النص غير موجود');
+                return;
+            }
+            
+            const commandText = commandElement.textContent;
+            
+            // استخدام Clipboard API إذا كان متاحاً
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(commandText).then(() => {
+                    showCopyFeedback();
+                }).catch(err => {
+                    console.error('فشل النسخ: ', err);
+                    fallbackCopy(commandText);
+                });
+            } else {
+                fallbackCopy(commandText);
+            }
+        }
+        
+        // طريقة بديلة للنسخ
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopyFeedback();
+                } else {
+                    alert('فشل نسخ النص. حاول يدوياً.');
+                }
+            } catch (err) {
+                alert('فشل نسخ النص. حاول يدوياً.');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        // عرض تأكيد النسخ
+        function showCopyFeedback() {
+            // إنشاء رسالة تأكيد
+            const feedback = document.createElement('div');
+            feedback.textContent = 'تم النسخ!';
+            feedback.style.position = 'fixed';
+            feedback.style.top = '20px';
+            feedback.style.left = '50%';
+            feedback.style.transform = 'translateX(-50%)';
+            feedback.style.background = '#10b981';
+            feedback.style.color = 'white';
+            feedback.style.padding = '10px 20px';
+            feedback.style.borderRadius = '5px';
+            feedback.style.zIndex = '1000';
+            feedback.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+            feedback.style.fontWeight = 'bold';
+            
+            document.body.appendChild(feedback);
+            
+            // إزالة الرسالة بعد 2 ثانية
+            setTimeout(() => {
+                feedback.style.opacity = '0';
+                feedback.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    if (document.body.contains(feedback)) {
+                        document.body.removeChild(feedback);
+                    }
+                }, 500);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
